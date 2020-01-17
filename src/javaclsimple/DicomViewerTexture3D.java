@@ -112,7 +112,7 @@ public class DicomViewerTexture3D extends CLEditor {
         HelpFormatter formatter = new HelpFormatter();
         CommandLineParser parser = new DefaultParser();
 
-        String inputDir = "C:\\";
+        String inputDir = "C:\\dicom\\";
 
         CommandLine cmd = parser.parse(options, args);
 
