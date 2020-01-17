@@ -12,6 +12,11 @@ import java.awt.Dimension;
 import java.awt.Point;
 import javaclsimple.loader.DataLoader;
 import javax.swing.JFrame;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Options;
 
 /**
  *
@@ -32,15 +37,17 @@ public class DicomViewerTexture3D extends CLEditor {
 
     private final static int[] demSize = new int[4];
     private final static float[] minMax = new float[2];
-    private final static float[] demBuff = DataLoader.getDicom("C:\\LboxExport", 62,62,0,450,450,438,demSize, minMax);
+    private float[] demBuff;// = DataLoader.getDicom("C:\\LboxExport", 62,62,0,450,450,438,demSize, minMax);
 //    private final static float[] demBuff = DataLoader.getDicom("C:\\LboxExport", 62,62,0,450,450,438,demSize, minMax);
     //private final static float[] demBuff = DataLoader.getDicom("C:\\dicom\\1010_brain_mr_02_lee", demSize, minMax);
 //    private final static float[] demBuff = DataLoader.getDicom("C:\\dicom\\Pied", demSize, minMax);
 //    private final static float[] demBuff = DataLoader.getDicom("C:\\LboxExport4",demSize, minMax);
 //    private final static float[] demBuff = DataLoader.getDicom("C:\\dicom\\Coeur", demSize, minMax);
 
-    public DicomViewerTexture3D() {
+    public DicomViewerTexture3D(String inputDir) {
         super("DicomViewerTexture3D.cl");
+        
+        demBuff = DataLoader.getDicom(inputDir, 62,62,0,450,450,438,demSize, minMax);
         
         clManager.createInputAs3DTexture(PARAM_BUFFER_3D, demBuff, demSize);
         
@@ -97,10 +104,27 @@ public class DicomViewerTexture3D extends CLEditor {
     }
 
     public static void main(String[] args) throws Exception {
+        
+        
+           Options options = new Options();
+        options.addOption("i", "input", true, "input directory");
+
+        HelpFormatter formatter = new HelpFormatter();
+        CommandLineParser parser = new DefaultParser();
+
+        String inputDir = "C:\\";
+
+        CommandLine cmd = parser.parse(options, args);
+
+        if (cmd.hasOption('i')) {
+            inputDir = cmd.getOptionValue('i');
+        }
+        
         JFrame frame = new JFrame("OpenCL Editor");
         frame.setResizable(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        DicomViewerTexture3D ch = new DicomViewerTexture3D();
+
+        DicomViewerTexture3D ch = new DicomViewerTexture3D(inputDir);
         ch.setPreferredSize(new Dimension(800, 600));
         frame.setLayout(new BorderLayout());
         frame.add(ch, BorderLayout.CENTER);
