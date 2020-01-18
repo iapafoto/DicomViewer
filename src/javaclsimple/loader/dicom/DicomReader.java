@@ -484,19 +484,19 @@ public class DicomReader {
      */
     private void storeImageParam(String tID, String sV) {
         if (tID.equals("(0028,0010)")) {
-    	    image.rows = Integer.parseInt(sV);
+    	    image.rows = (int)Double.parseDouble(sV.trim());
     	} else if (tID.equals("(0028,0011)")) {
-    	    image.cols = Integer.parseInt(sV);
+    	    image.cols = (int)Double.parseDouble(sV.trim());
     	} else if (tID.equals("(0028,0100)")) {
-    	    image.colorDepth = Integer.parseInt(sV);  // BitsAllocated, not BitsStored!
+    	    image.colorDepth = (int)Double.parseDouble(sV.trim());  // BitsAllocated, not BitsStored!
     	} else if (tID.equals("(0028,1052)")) {
-    	    image.rescaleIntercept = Integer.parseInt(sV.trim());  
+    	    image.rescaleIntercept = (int)Double.parseDouble(sV.trim());  
     	} else if (tID.equals("(0028,1053)")) {
     	    image.rescaleSlope = (int)Double.parseDouble(sV.trim());  
     	} else if (tID.equals("(0054,0081)")) { // || tagID.equals("(0028,0008)")) || tagID.equals("(0054,0053)")) {
-            image.slices = Integer.parseInt(sV); // NumberOfFrames (or NumberOfSlices or NumberOfFramesInRotation)
+            image.slices = (int)Double.parseDouble(sV.trim()); // NumberOfFrames (or NumberOfSlices or NumberOfFramesInRotation)
         } else if (tagName.equals("PixelData")) {
-            image.totBytes = Integer.parseInt(sV);
+            image.totBytes = (int)Double.parseDouble(sV.trim());
         } 
     } 
 

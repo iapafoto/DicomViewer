@@ -34,7 +34,6 @@ inline float valueAt(const float3 p, read_only image3d_t dem) {
     return read_imagef(dem, sampler_linear, (float4)(p.x, p.y, p.z*H_COEFF, 0.f)).x;
 }
 
-
 inline float map(const float a0, const float b0, const float a1, const float b1, const float v) {
     return a1 + (v-a0)*(b1-a1)/(b0-a0);
 }
@@ -170,7 +169,7 @@ float doAmbiantOcclusion(const float3 ro, const float3 n, const int nbSample, co
 #if AO_NB_SAMPLE>1
     }
 #endif
-    return (1.-ao);
+    return (1.f-ao);
 }
 
 float doShadow(const float3 p0, const float3 n, const float dd, const float dMax, const float4 boundsMin, const float4 boundsMax, read_only image3d_t buf) {
@@ -184,7 +183,7 @@ float doShadow(const float3 p0, const float3 n, const float dd, const float dMax
             return 1.f;  // hors de la zone de filtrage
        val = valueAt(pt, buf);
        if (val > boundsMin.w &&  val < boundsMax.w) { // on a rencontré un obstacle
-           return 1. - clamp((dMax-d)/dMax,0.f,1.f); // invMix(dMax,0.f,d); // plus il est pres plus il a de l'influence
+           return 1.f - clamp((dMax-d)/dMax,0.f,1.f); // invMix(dMax,0.f,d); // plus il est pres plus il a de l'influence
        }
     }
     return 1.f;
@@ -261,7 +260,7 @@ int box(const float3 ro, const float3 rd, const float3 sz, float* tN, float* tF,
     *n = -sign(rd) * step(a.yzx,a.xyz) * step(a.zxy,a.xyz);
     *tN = max(max(a.x,a.y),a.z);
     *tF = min(min(b.x,b.y),b.z);
-    return *tN<*tF && *tF>0. ? 1 : 0;
+    return *tN<*tF && *tF>0.f ? 1 : 0;
 }
 
 
@@ -319,7 +318,7 @@ float4 renderRay(const float3 ro, const float3 rd, const float4 sliderMin, const
 
     float4 col = (float4)(cback,1.f);
 
-    const float3 lightDir = normalize(normalize(ro-center)*5.f -7.f*cross((float3)(0,0,1.f), normalize(ro-center)));
+    const float3 lightDir = normalize(normalize(ro-center)*5.f -7.f*cross((float3)(0.f,0.f,1.f), normalize(ro-center)));
     
     //const float3 LIGHT_DIR = -normalize((float3)(5.f,-5.f,2.5f));
     
