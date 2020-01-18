@@ -240,15 +240,15 @@ inline float4 getColor(const float valId, const float min, const float max) {
 //	return (float4)(d,d,d,1.f);
 
     return (valId>=min && valId<=max) ? (
-            valId<-308.f?(float4)(0.f,0.f,1.f,1.f)*map(-1000.f, -308.f, 0.f,1.f, valId):   // air
+            valId<-308.f?(float4)(0.f,1.f,1.f,1.f)*map(-1400.f, -308.f, 0.f,1.f, valId):   // air
             valId<-180.f?(float4)(0.f,1.f,1.f,1.f):                                        // poumon
             valId<-17.f?(float4)(.95f,1.f,.7f,1.f)*map(-180.f, -17.f, .8f,1.f, valId):     // graisses
             valId<16.f?(float4)(1.f,1.f,.7f,1.f):                                          // eau
             valId<70.f?(float4)(1.f,.5f,.5f,1.f)*map(16.f, 70.f, .4f,1.f, valId):          // muscle
-            valId<160.f?(float4)(1.f,.9f,1.f,1.f)*map(70.f, 160.f, .2f,1.f, valId):	   // foie
+            valId<160.f?(float4)(1.f,.9f,.5f,1.f)*map(70.f, 160.f, .2f,1.f, valId):	   // cartilage / foie
             valId<260.f?(float4)(1.f,1.f,.7f,1.f)*map(160.f, 260.f, .85f,1.f, valId):       // tissus mou
             valId<516.f?(float4)(.8f,.8f,.6f,1.f)*map(260.f, 516.f, .5f,1.f, valId):                                         // os spongieux
-		        (float4)(.75f,.55f,.3f,1.f)) : (float4)(1.f);                       // os
+		        1.5f*(float4)(.75f,.65f,.53f,1.f)) : (float4)(1.f);                       // os
 
 //        Double[] values = {-1000., -308., -180., -17., 16., 70., 165., 230., 516., max};
         //                    Air,             poumon,                    graisses,                     eau,             muscle,      foie,       tisuss mous,          os spongieux,    os
@@ -340,9 +340,18 @@ float4 renderRay(const float3 ro, const float3 rd, const float4 sliderMin, const
             if (d<dmax) {
                 p = ro+rd*d;
                 n = (val<bbMin.w?-1.f:1.f)*normalAt(p, buf);
-                col = getColor(val<bbMin.w ? bbMin.w : bbMax.w, bbMin.w, bbMax.w);
-//col *= col;
-                col = doShading(rd,p,n,lightDir, col, bbMin, bbMax, buf, quality);
+float valin;
+float nb=0.f;
+float4 coltot = (float4)(0.f);
+ float rand = .001f+hash1(rd.y*(p.x+p.y+p.z));
+for (float in=rand; in<2.f; in+=.2f) {
+valin = valueAt(p+rd*in, buf); 
+                coltot += getColor(valin, valin, valin);
+nb+=1.f;
+}
+col = coltot/nb;
+//col *= col;  
+              col = doShading(rd,p,n,lightDir, col, bbMin, bbMax, buf, quality);
               //  col.xyz = mix(col.xyz, cback, clamp(((d-dmin)/400.f)*(d-dmin)/400.f, 0.f, 1.f));
 
     // Blend in a bit of logic-defying fog for atmospheric effect. :)
