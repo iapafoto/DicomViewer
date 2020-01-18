@@ -47,14 +47,14 @@ public class DicomViewerTexture3D extends CLEditor {
     public DicomViewerTexture3D(String inputDir) {
         super("DicomViewerTexture3D.cl");
         
-        demBuff = DataLoader.getDicom(inputDir, 62,62,0,450,450,438,demSize, minMax);
+        demBuff = DataLoader.getDicom(inputDir, /*62,62,0,450,450,438,*/demSize, minMax);
         
         clManager.createInputAs3DTexture(PARAM_BUFFER_3D, demBuff, demSize);
         
         initSlider1(0, 1000, 200f, 800f);  
         initSlider2(0, 1000, 200f, 800f);
         initSlider3(0, 1000, 200f, 800f);
-        initSlider4(-1000, 1000, 230f, 900f);
+        initSlider4(minMax[0], minMax[1], 230f, 900f);
     }
      
     @Override
@@ -112,13 +112,16 @@ public class DicomViewerTexture3D extends CLEditor {
         HelpFormatter formatter = new HelpFormatter();
         CommandLineParser parser = new DefaultParser();
 
-        String inputDir = "C:\\dicom\\";
+        String inputDir = "C:\\dicom";
 
         CommandLine cmd = parser.parse(options, args);
 
         if (cmd.hasOption('i')) {
             inputDir = cmd.getOptionValue('i');
         }
+        
+        
+        System.out.println("=> Read dicom on dir: [" + inputDir + "]");
         
         JFrame frame = new JFrame("OpenCL Editor");
         frame.setResizable(true);

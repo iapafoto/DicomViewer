@@ -4,6 +4,8 @@
  */
 package javaclsimple.gui;
 
+import com.google.common.base.Charsets;
+import com.google.common.io.Resources;
 import javaclsimple.api.OpenCLWithJavaCL;
 import com.nativelibs4java.util.IOUtils;
 import earth.map.SynMap;
@@ -42,6 +44,7 @@ import javaclsimple.editor.JCompilableCodeEditor;
 import javaclsimple.styles.ColorTools;
 import javaclsimple.styles.Palette;
 import javaclsimple.styles.SliderComponent;
+import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
@@ -213,19 +216,19 @@ public abstract class CLEditor extends javax.swing.JPanel implements KeyListener
 
         try {
             // TODO read it on disk
-            String src = IOUtils.readText(CLEditor.class.getResource("../opencl/" + clFileName));
+//            String src = IOUtils.readText(CLEditor.class.getResource("../opencl/" + clFileName));
+            String src = Resources.toString(CLEditor.class.getClassLoader().getResource("javaclsimple/opencl/" + clFileName), Charsets.UTF_8);
+
+  //          String src = IOUtils.readText(CLEditor.class.getResource("javaclsimple/opencl/" + clFileName));
             codePane.setText(src);
         } catch (IOException ex) {
             Logger.getLogger(CLEditor.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        this.sliderMinMax1.addPropertyChangeListener(SliderComponent.VALUE_CHANGING, new PropertyChangeListener() {
-            @Override
-            public void propertyChange(PropertyChangeEvent evt) {
-                if (clManager.isKernelOk()) {
-                    updateKernelArgsAfterCtrlChanged();
-                    regenerateFast();
-                }
+        this.sliderMinMax1.addPropertyChangeListener(SliderComponent.VALUE_CHANGING, (PropertyChangeEvent evt) -> {
+            if (clManager.isKernelOk()) {
+                updateKernelArgsAfterCtrlChanged();
+                regenerateFast();
             }
         });
 

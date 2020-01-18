@@ -29,6 +29,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -37,6 +38,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
 
 import javax.swing.JOptionPane;
@@ -489,7 +492,7 @@ public class DicomReader {
     	} else if (tID.equals("(0028,1052)")) {
     	    image.rescaleIntercept = Integer.parseInt(sV.trim());  
     	} else if (tID.equals("(0028,1053)")) {
-    	    image.rescaleSlope = Integer.parseInt(sV.trim());  
+    	    image.rescaleSlope = (int)Double.parseDouble(sV.trim());  
     	} else if (tID.equals("(0054,0081)")) { // || tagID.equals("(0028,0008)")) || tagID.equals("(0054,0053)")) {
             image.slices = Integer.parseInt(sV); // NumberOfFrames (or NumberOfSlices or NumberOfFramesInRotation)
         } else if (tagName.equals("PixelData")) {
@@ -680,9 +683,21 @@ public class DicomReader {
     }
     
     public static double[][][] decodeDirToArray(File folder) {
-        int k=folder.listFiles().length;
-        double[][][] buff = new double[folder.listFiles().length][][];
-        for (final File fileEntry : folder.listFiles()) {
+        File[] files = folder.listFiles();
+        int k = files.length;
+        double[][][] buff = new double[k][][];
+                Pattern p = Pattern.compile("^([a-zA-Z]++)?(\\d+)(.\\w+)?$");
+               
+        Arrays.sort(files, (a, b) -> {
+            Matcher m1 = p.matcher(a.getName());
+            Matcher m2 = p.matcher(b.getName());
+            if (m1.find()&& m2.find()) {
+                return Integer.compare(Integer.parseInt(m1.group(2)), Integer.parseInt(m2.group(2)));
+            }
+            return 0;
+        });
+        
+        for (final File fileEntry : files) {
             if (!fileEntry.isDirectory()) {
                 DicomReader instance = new DicomReader(fileEntry, new File(fileEntry.getAbsolutePath() + ".png"));
                 instance.decode();

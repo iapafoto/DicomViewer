@@ -85,13 +85,12 @@
             <file>file:/home/sebastien/NetBeansProjects/JavaCLSimple/src/javaclsimple/loader/grib/Grib3D.java</file>
         </group>
         <group>
-            <file>file:/C:/Users/durands/Desktop/dev/DicomViewer/src/javaclsimple/loader/dicom/LoadDict.java</file>
-            <file>file:/C:/Users/durands/Desktop/dev/DicomViewer/src/javaclsimple/fullscreen/CapabilitiesTest.java</file>
-            <file>file:/C:/Users/durands/Desktop/dev/DicomViewer/src/javaclsimple/gui/CLEditor.java</file>
-            <file>file:/C:/Users/durands/Desktop/dev/DicomViewer/src/javaclsimple/api/OpenCLWithJOCL.java</file>
-            <file>file:/C:/Users/durands/Desktop/dev/DicomViewer/src/javaclsimple/loader/dicom/DicomReader.java</file>
-            <file>file:/C:/Users/durands/Desktop/dev/DicomViewer/src/javaclsimple/DicomViewer.java</file>
-            <file>file:/C:/Users/durands/Desktop/dev/DicomViewer/src/javaclsimple/loader/DataLoader.java</file>
+            <file>file:/C:/Users/durands/Documents/GitHub/DicomViewer/src/javaclsimple/gui/CLEditor.java</file>
+            <file>file:/C:/Users/durands/Documents/GitHub/DicomViewer/src/javaclsimple/loader/dicom/DicomReader.java</file>
+            <file>file:/C:/Users/durands/Documents/GitHub/DicomViewer/src/javaclsimple/api/OpenCLWithJOCL.java</file>
+            <file>file:/C:/Users/durands/Documents/GitHub/DicomViewer/src/javaclsimple/gui/PanelController.java</file>
+            <file>file:/C:/Users/durands/Documents/GitHub/DicomViewer/src/javaclsimple/DicomViewerTexture3D.java</file>
+            <file>file:/C:/Users/durands/Documents/GitHub/DicomViewer/src/javaclsimple/loader/DataLoader.java</file>
         </group>
     </open-files>
 </project-private>
