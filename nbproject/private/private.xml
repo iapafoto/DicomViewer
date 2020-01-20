@@ -89,7 +89,9 @@
             <file>file:/C:/Users/durands/Documents/GitHub/DicomViewer/src/javaclsimple/loader/dicom/DicomReader.java</file>
             <file>file:/C:/Users/durands/Documents/GitHub/DicomViewer/src/javaclsimple/api/OpenCLWithJOCL.java</file>
             <file>file:/C:/Users/durands/Documents/GitHub/DicomViewer/src/javaclsimple/gui/PanelController.java</file>
+            <file>file:/C:/Users/durands/Documents/GitHub/DicomViewer/src/javaclsimple/opencl/DicomViewerTexture3D.cl</file>
             <file>file:/C:/Users/durands/Documents/GitHub/DicomViewer/src/javaclsimple/DicomViewerTexture3D.java</file>
+            <file>file:/C:/Users/durands/Documents/GitHub/DicomViewer/src/javaclsimple/loader/dicom/LoadDict.java</file>
             <file>file:/C:/Users/durands/Documents/GitHub/DicomViewer/src/javaclsimple/loader/DataLoader.java</file>
         </group>
     </open-files>

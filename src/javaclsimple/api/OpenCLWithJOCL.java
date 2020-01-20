@@ -333,8 +333,8 @@ public class OpenCLWithJOCL {
         // Create a command-queue
         System.out.println("Creating command queue...");
         long properties = 0;
-        properties |= CL_QUEUE_PROFILING_ENABLE;
-        properties |= CL_QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE;
+     //   properties |= CL_QUEUE_PROFILING_ENABLE;
+     //   properties |= CL_QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE;
         commandQueue = clCreateCommandQueue(context, bestDevice, properties, null);
 
         System.out.println("Command queue ok");

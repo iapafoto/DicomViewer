@@ -51,9 +51,9 @@ public class DicomViewerTexture3D extends CLEditor {
         
         clManager.createInputAs3DTexture(PARAM_BUFFER_3D, demBuff, demSize);
         
-        initSlider1(0, 1000, 200f, 800f);  
-        initSlider2(0, 1000, 200f, 800f);
-        initSlider3(0, 1000, 200f, 800f);
+        initSlider1(0, demSize[0], 0f, demSize[0]);  
+        initSlider2(0, demSize[1], 0f, demSize[1]);
+        initSlider3(0, demSize[2], 0f, demSize[2]);
         initSlider4(minMax[0], minMax[1], 230f, 900f);
     }
      

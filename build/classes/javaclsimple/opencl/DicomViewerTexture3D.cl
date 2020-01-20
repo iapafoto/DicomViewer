@@ -212,7 +212,7 @@ float4 doShading(const float3 rd, const float3 p, const float3 n, const float3 L
         specular = 0.f;
     }
     const float ambiant = .5f;
-    float3 c = (.5f+(.5f*ao)) * (col.xyz*(ambiant + diffuse*.25f) + specular*.2f) + .3f*rimCol;	 
+    float3 c = (.5f+(.5f*ao)) * (col.xyz*(ambiant + diffuse*.25f) + specular*.2f) + .2f*rimCol;	 
     
 #ifdef AO
     if (quality->ao_nb) {
@@ -242,8 +242,9 @@ inline float4 getColor(const float valId, const float min, const float max) {
     return (valId>=min && valId<=max) ? (
             valId<-308.f?(float4)(0.f,1.f,1.f,1.f)*map(-1400.f, -308.f, 0.f,1.f, valId):   // air
             valId<-180.f?(float4)(0.f,1.f,1.f,1.f):                                        // poumon
-            valId<-17.f?(float4)(.95f,1.f,.7f,1.f)*map(-180.f, -17.f, .8f,1.f, valId):     // graisses
-            valId<16.f?(float4)(1.f,1.f,.7f,1.f):                                          // eau
+            valId<-37.f?(float4)(.95f,.95f,.75f,1.f)*map(-37.f, -0.f, .55f, .4f, valId):     // graisses
+            valId<0.f?(float4)(1.f,.5f,.5f,1.f)*.4f:     // graisses
+    //        valId<16.f?(float4)(1.f,1.f,.7f,1.f):                                          // eau
             valId<70.f?(float4)(1.f,.5f,.5f,1.f)*map(16.f, 70.f, .4f,1.f, valId):          // muscle
             valId<160.f?(float4)(1.f,.9f,.5f,1.f)*map(70.f, 160.f, .2f,1.f, valId):	   // cartilage / foie
             valId<260.f?(float4)(1.f,1.f,.7f,1.f)*map(160.f, 260.f, .85f,1.f, valId):       // tissus mou
@@ -340,22 +341,25 @@ float4 renderRay(const float3 ro, const float3 rd, const float4 sliderMin, const
             if (d<dmax) {
                 p = ro+rd*d;
                 n = (val<bbMin.w?-1.f:1.f)*normalAt(p, buf);
-float valin;
-float nb=0.f;
-float4 coltot = (float4)(0.f);
- float rand = .001f+hash1(rd.y*(p.x+p.y+p.z));
-for (float in=rand; in<2.f; in+=.2f) {
-valin = valueAt(p+rd*in, buf); 
-                coltot += getColor(valin, valin, valin);
-nb+=1.f;
-}
-col = coltot/nb;
-//col *= col;  
-              col = doShading(rd,p,n,lightDir, col, bbMin, bbMax, buf, quality);
-              //  col.xyz = mix(col.xyz, cback, clamp(((d-dmin)/400.f)*(d-dmin)/400.f, 0.f, 1.f));
+                
+                // get color from inside (enable to get real color of element)
+                float valin;
+                float nb=0.f;
+                float4 coltot = (float4)(0.f);
+                float rand = .001f+hash1(rd.y*(p.x+p.y+p.z));
 
-    // Blend in a bit of logic-defying fog for atmospheric effect. :)
-    col.xyz = mix(col.xyz, cback, .15f*smoothstep(0.f, .95f, (d-dmin)/(dmax-dmin))); // exp(-.002*t*t), etc.
+                for (float in=rand; in<2.f; in+=.2f) {
+                    valin = valueAt(p+rd*in, buf); 
+                    coltot += getColor(valin, valin, valin);
+                    nb+=1.f;
+                }
+                col = coltot/nb;
+
+                col = doShading(rd,p,n,lightDir, col, bbMin, bbMax, buf, quality);
+                //  col.xyz = mix(col.xyz, cback, clamp(((d-dmin)/400.f)*(d-dmin)/400.f, 0.f, 1.f));
+
+                // Blend in a bit of logic-defying fog for atmospheric effect. :)
+                col.xyz = mix(col.xyz, cback, .15f*smoothstep(0.f, .95f, (d-dmin)/(dmax-dmin))); // exp(-.002*t*t), etc.
 
             } else {
 		col.xyz = cback;            	
@@ -378,7 +382,7 @@ __kernel void render(const float3 roo, const float3 ta, const float4 sliderMin, 
 
     const float3 Bounds = bbMax.xyz - bbMin.xyz; 
     const float3 center = .5f*(bbMax.xyz+bbMin.xyz);
-    const float3 COLOR_BACK = (float3)(.922f,.926f,.928f);   
+    const float3 COLOR_BACK = .3f*(float3)(.922f,.926f,.928f);   
     
     const float2 q = ((float2)(x,y)+deltaPix)/convert_float2(outSize);
     const float3 cback = COLOR_BACK * pow(16.f*q.x*q.y*(1.f-q.x)*(1.f-q.y),.3f);
